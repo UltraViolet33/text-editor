@@ -19,8 +19,27 @@ class TextEditorGui(customtkinter.CTk):
 
         self.textbox.bind("<Key>", self.update_text)
 
-        self.undo_button = customtkinter.CTkButton(master=self, text="Undo")
-        self.undo_button.pack(side=tk.LEFT)
+        self.load_button = customtkinter.CTkButton(master=self, text="Load", command=self.load)
+        self.load_button.pack(side=tk.LEFT)
+
+        # self.redo_button = customtkinter.CTkButton(master=self, text="Redo")
+        # self.redo_button.pack(side=tk.RIGHT)
+
+
+        self.save_button = customtkinter.CTkButton(master=self, text="Save", command=self.save)
+        self.save_button.pack(side=tk.RIGHT)
+
+
+    def save(self):
+        filename = tk.filedialog.asksaveasfilename(defaultextension=".txt")
+        with open(filename, "w") as f:
+            f.write(self.editor.text)
+
+    def load(self):
+        filename = tk.filedialog.askopenfilename(defaultextension=".txt")
+        with open(filename, "r") as f:
+            self.editor.text = f.read()
+        self.update_textbox()
 
     def undo(self):
         self.editor.undo()
